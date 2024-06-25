@@ -3,6 +3,13 @@
 {% block content %}
     <h1>Hello, {{ agent.agentname }}!</h1>
     {% for post in posts %}
-    <div><p>{{ post.author.agentname }}: <b>{{ post.property }}</b></p> {{ post.image }} {{post.video}} {{ post.Location }} {{post.address}}</div>
+    <div class="display_posts"> 
+        <p><b>{{ post.property }}</b> <em>Price: {{ post.price }}</em></p>
+        <p class="images">{{ post.image }}</p>
+        <p><a href="#link to video post">click to watch short video of the property</a>{{post.video}}</p>
+        <p>Location: {{ post.Location }} </p>
+        <p>Address {{post.address}}</p>
+        <p>Posted by {{ post.author.agentname }}</p>
+    </div>
     {% endfor %}
 {% endblock %}
