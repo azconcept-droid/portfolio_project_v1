@@ -1,3 +1,4 @@
+#!venv/bin/python3
 """ Configuration module """
 import os
 
