@@ -1,8 +1,8 @@
 #!venv/bin/python3
-""" Route module for the Flask app"""
+"""Index module for the Flask app"""
 
 from flask import render_template, flash, redirect, url_for
-from frontend import app
+from agent_app import app
 from models.forms import LoginForm
 
 

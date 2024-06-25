@@ -1,3 +1,3 @@
 #!venv/bin/python3
 
-from frontend import app
+from agent_app import app

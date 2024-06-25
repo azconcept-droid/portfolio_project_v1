@@ -12,5 +12,5 @@ app.config.from_object(Config)
 # db = SQLAlchemy(app)
 # migrate = Migrate(app, db)
 
-from frontend import index
+from agent_app import routes, error
 from models import agent, customer
