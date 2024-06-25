@@ -1,18 +1,44 @@
-# #!venv/bin/python3
-# """ Agent model module """
-# from typing import Optional
-# import sqlalchemy as sa
-# import sqlalchemy.orm as so
-# from app import db
+#!venv/bin/python3
+""" Agent model module """
 
-# class Agent(db.Model):
-#     id: so.Mapped[int] = so.mapped_column(primary_key=True)
-#     username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True,
-#                                                 unique=True)
-#     email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True,
-#                                              unique=True)
-#     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
+from datetime import datetime, timezone
+from typing import Optional
+import sqlalchemy as sa
+import sqlalchemy.orm as so
+from agent_app import db
 
-#     def __repr__(self):
-#         return '<User {}>'.format(self.username)
-    
+
+class Agent(db.Model):
+    """ Agent class for Agent table """
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+
+    username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True,
+                                                unique=True)
+
+    email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True,
+                                             unique=True)
+
+    license: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256), nullable=True)
+
+    password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
+
+    posts: so.WriteOnlyMapped['Post'] = so.relationship(back_populates='author')
+
+
+    def __repr__(self):
+        return '<Agent {}>'.format(self.username)
+
+
+class Post(db.Model):
+    """ Post class db model"""
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    body: so.Mapped[str] = so.mapped_column(sa.String(140))
+    timestamp: so.Mapped[datetime] = so.mapped_column(
+        index=True, default=lambda: datetime.now(timezone.utc))
+    agent_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(Agent.id),
+                                               index=True)
+
+    author: so.Mapped[Agent] = so.relationship(back_populates='posts')
+
+    def __repr__(self):
+        return '<Post {}>'.format(self.body)

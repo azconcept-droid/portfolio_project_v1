@@ -15,3 +15,5 @@
 8. Handle login DONE
 
 9. Send errors by email
+
+10. Logs errors to a file
