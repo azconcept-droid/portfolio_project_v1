@@ -6,6 +6,7 @@ from typing import Optional
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 from agent_app import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class Agent(db.Model):
@@ -27,6 +28,14 @@ class Agent(db.Model):
 
     def __repr__(self):
         return '<Agent {}>'.format(self.username)
+    
+    def set_password(self, password):
+        """ Set user password hashed """
+        self.password_hash = generate_password_hash(password)
+    
+    def check_password(self, password):
+        """ Validate password """
+        return check_password_hash(self.password_hash, password)
 
 
 class Post(db.Model):
