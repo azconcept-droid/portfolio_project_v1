@@ -1,0 +1,7 @@
+# add new fields e.g in agent.py module
+
+# generate new migration script
+ flask db migrate -m "your comment"
+
+# update database
+ flask db upgrade
