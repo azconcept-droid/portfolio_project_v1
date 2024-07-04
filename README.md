@@ -1,5 +1,8 @@
 # portfolio-project
 
+## Agent app
+An application where real estate agent post available real estate properties such has an apartment, a house or land for sale or lease and potential customers can see the posts then they can contact the agent to make their deal.
+
 ## Table of Content
 * [Environment](#environment)
 * [Installation](#installation)
