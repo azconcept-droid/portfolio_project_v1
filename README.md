@@ -15,8 +15,29 @@ An application where real estate agent post available real estate properties suc
 * [License](#license)
 
 ## Environment
-This project is interpreted/tested on Ubuntu 22.04 LTS using python3 (version 3.4.3)
+This project is interpreted/tested on Ubuntu 22.04 LTS using python3 (version 3.10.12)
 
+## Installation
+1. Start up python virtual environment
+  ```
+  python3 -m venv venv
+  ```
+2. Start the virtual environment
+  ```
+  source venv/bin/activate
+  ```
+3. Install squelite
+  ```
+  sudo apt install sqlite3
+  ```
+4. Install all dependencies
+  ```
+
+  ```
+5. Start the app
+  ```
+  flask run
+  ```
 ## Bugs
 1. When I run the command
     ```

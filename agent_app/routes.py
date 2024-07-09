@@ -8,12 +8,14 @@ from flask_login import current_user, login_user, logout_user
 from flask_login import login_required
 import sqlalchemy as sa
 from agent_app import app, db
-from models.forms import LoginForm, EditProfileForm
+from models.forms import LoginForm, EditProfileForm, RegistrationForm
 from models.user import User
 from models.agent import Agent
+from datetime import datetime, timezone
 
 @app.route('/')
 @app.route('/index')
+@login_required
 def index():
     """Default route, home page"""
 
@@ -48,47 +50,100 @@ def index():
         }
     ]
 
-    return render_template('index.html', title='Home', agent=agent, posts=posts)
+    return render_template('index.html', title='Home', posts=posts)
+    # return render_template('index.html', title='Home', agent=agent, posts=posts)
+
+
+@app.route('/agent/<username>')
+@login_required
+def agent(username):
+    agent = db.first_or_404(sa.select(Agent).where(Agent.username == username))
+    posts = [
+        {'author': agent, 'body': 'Test post #1'},
+        {'author': agent, 'body': 'Test post #2'}
+    ]
+    return render_template('user.html', agent=agent, posts=posts)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """ Login function """
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
-    if (form.user_type.data == 'User'):
-        if form.validate_on_submit():
-            user = db.session.scalar(
-                sa.select(User).where(User.username == form.username.data))
-            if user is None or not user.check_password(form.password.data):
-                flash('Invalid username or password')
-                return redirect(url_for('login'))
-            login_user(user, remember=form.remember_me.data)
-            return redirect(url_for('index'))
-    else:
-        if form.validate_on_submit():
-            user = db.session.scalar(
-                sa.select(Agent).where(Agent.username == form.username.data))
-            if user is None or not user.check_password(form.password.data):
-                flash('Invalid agentname or password')
-                return redirect(url_for('login'))
-            login_user(user, remember=form.remember_me.data)
-            return redirect(url_for('index'))   
- 
-    return render_template('login.html', title='Sign In', form=form)
+    user = object
+    user_type = form.user_type.data
+    print(user_type)
+    print(user_type == "customer" or user_type == "Customer")
+    next_page = ""
+    if form.validate_on_submit():
+        # if (user_type == 'customer' or user_type == 'Customer'):
+        #     user = db.session.scalar(
+        #         sa.select(User).where(User.username == form.username.data))
+        # else:
+        user = db.session.scalar(
+            sa.select(Agent).where(Agent.username == form.username.data))
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
+        try:
+            next_page = request.args.get('next')[1:]
+        except TypeError:
+            next_page = url_for('index')
+        print(next_page)
+        if next_page is None or urlsplit(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(url_for(next_page))
 
+    return render_template('login.html', title='Login', form=form)
+
+
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.now(timezone.utc)
+        db.session.commit()
 
 
 @app.route('/logout')
 def logout():
+    """ Logout function """
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    user = object
+    # if form.user_type.data == "customer" or "Customer":
+    #     if form.validate_on_submit():
+    #         user = User(username=form.username.data, email=form.email.data)
+    #         user.set_password(form.password.data)
+    #         db.session.add(user)
+    #         db.session.commit()
+    #         flash('Congratulations, you are now a registered user!')
+    #         return redirect(url_for('login'))
+    #     return render_template('register.html', title='Register', form=form)
+
+    if form.validate_on_submit():
+        user = Agent(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered agent!')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    form = EditProfileForm()
+    """ Edit profile function """
+    form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
