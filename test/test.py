@@ -7,7 +7,7 @@ from app import app, db
 from models.agent import Agent, Post
 
 
-class UserModelCase(unittest.TestCase):
+class AgentModelCase(unittest.TestCase):
     def setUp(self):
         self.app_context = app.app_context()
         self.app_context.push()
