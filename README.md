@@ -32,7 +32,7 @@ This project is interpreted/tested on Ubuntu 22.04 LTS using python3 (version 3.
   ```
 4. Install all dependencies
   ```
-
+  pip install -r requirements.txt
   ```
 5. Start the app
   ```

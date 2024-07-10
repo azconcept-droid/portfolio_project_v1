@@ -1,28 +1,30 @@
 sudo apt install sqlite3
 
- flask db migrate -m "users table"
- 1967  flask db upgrade
- 1968  flask db migrate -m "posts table"
+flask db migrate -m "users table"
+flask db upgrade
+flask db migrate -m "posts table"
  
- 1970  flask db migrate -m "posts table"
+flask db migrate -m "posts table"
 
- 1980  flask db downgrade base
+flask db downgrade base
 
- 1983  touch useful-commands.txt
+touch useful-commands.txt
 
- 1985  flask db upgrade
- 1986  flask db downgrade
- 1987  flask db migrate -m "posts table"
- 1988  flask db downgrade
- 1989  flask db migrate -m "users agenats table"
- 1990  flask db upgrade
- 1991  touch db-queries.txt
- 1992  flask db downgrade base
- 1993  flask db upgrade
- 1994  flask db downgrade
- 1995  flask shell
- 1996  git add .
- 1997  git commit -m "add db integration for persistent storage"
- 1998  git push
- 1999  exit
- 2000  history | tail -100 > commands.txt
+flask db upgrade
+flask db downgrade
+flask db migrate -m "posts table"
+flask db downgrade
+flask db migrate -m "users agenats table"
+flask db upgrade
+touch db-queries.txt
+flask db downgrade base
+flask db upgrade
+flask db downgrade
+flask shell
+git add .
+git commit -m "add db integration for persistent storage"
+git push
+exit
+history | tail -100 > commands.txt
+pip3 freeze > requirements.txt
+pip install -r requirements.txt
