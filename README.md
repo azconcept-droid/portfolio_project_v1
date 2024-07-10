@@ -5,6 +5,8 @@ An application where real estate agent post available real estate properties suc
 
  ![Agent app landing page](./Hero-page.png)
 
+ You can read my blog for this project post [here](https://yalectdev.medium.com/portfolio-project-mvp-completed-11e5ad3cd1e4)
+
 ## Table of Content
 * [Description](#agent-app)
 * [Environment](#environment)
