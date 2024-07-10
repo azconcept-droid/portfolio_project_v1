@@ -1,16 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Welcome {{ current_user.username }}!</h1>
-    <h3> This are the available properties posted </h3>
+    <!-- <h1>Hi, {{ current_user.username }}!</h1> -->
+    {% if form %}
+    <h5>  Hello {{ current_user.username }}, you can post new property here</h5>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.post.label }}<br>
+            {{ form.post(cols=32, rows=4) }}<br>
+            {% for error in form.post.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    {% else %}
+    <h4> Explore available properties posted </h4>
+    {% endif %}
+    
     {% for post in posts %}
-    <div class="display_posts"> 
-        <p><b>{{ post.property }}</b> <em>Price: {{ post.price }}</em></p>
-        <p class="images">{{ post.image }}</p>
-        <p><a href="#link to video post">click to watch short video of the property</a>{{post.video}}</p>
-        <p>Location: {{ post.Location }} </p>
-        <p>Address {{post.address}}</p>
-        <p>Posted by {{ post.author.agentname }}</p>
-    </div>
+        {% include '_post.html' %}
     {% endfor %}
 {% endblock %}

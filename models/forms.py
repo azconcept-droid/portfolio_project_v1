@@ -69,3 +69,11 @@ class RegistrationForm(FlaskForm):
                 Agent.email == email.data))
         if user is not None:
             raise ValidationError('Email already exist use different email.')
+
+class EmptyForm(FlaskForm):
+    submit = SubmitField('Submit')
+
+class PostForm(FlaskForm):
+    post = TextAreaField('Post property', validators=[
+        DataRequired(), Length(min=1, max=140)])
+    submit = SubmitField('Submit')

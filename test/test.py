@@ -1,10 +1,10 @@
 import os
 os.environ['DATABASE_URL'] = 'sqlite://'
 
+from agent_app import app, db
+from models.agent import Agent, Post
 from datetime import datetime, timezone, timedelta
 import unittest
-from app import app, db
-from models.agent import Agent, Post
 
 
 class AgentModelCase(unittest.TestCase):
